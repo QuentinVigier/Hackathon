@@ -1,3 +1,9 @@
+:root {
+    --main-bg-color: #f9aad0;
+    --main-bg-color: #ad53a6;
+    --main-bg-color: #502779;
+  }
+
 body {
     display: flex;
     justify-content: center;
@@ -12,4 +18,12 @@ video {
     border: 2px solid #333;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.btn {
+    width: 22.5rem;
+    height: 3.75rem;
+    border-radius: 1rem;
+    background-color: #502779;
+    /* font-family: poppins; */
 }
