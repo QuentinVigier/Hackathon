@@ -12,7 +12,88 @@ body {
     margin: 0;
     background-color: #f0f0f0;;
     font-family: "Poppins", sans-serif;
+    transition: background-color 0.5s, color 0.5s;
 }
+
+body.day-mode {
+    background-color: white;
+    color: black;
+}
+
+body.night-mode {
+    background-color: black;
+    color: white;
+}
+
+.toogle-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
+.mood-switch {
+    display: none;
+}
+
+.mode-label {
+    display: inline-block;
+    width: 60px;
+    height: 43px;
+    background-color: #ccc;
+    border-radius: 34px;
+    position: relative;
+    cursor: pointer;
+}
+
+.mode-label::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 28px;
+    height: 28px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.mode-switch:checked+.mode-label::after {
+    transform: translateX(26px);
+}
+
+.mode-on,
+.mode-off {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.mode-on {
+    left: 10px;
+}
+
+.mode-off {
+    right: 10px;
+}
+
+.mode-icon {
+    width: 24px;
+    height: 24px;
+}
+
+#icon-sun {
+    margin-left: 10px;
+    margin-top: 2.5px;
+}
+
+#icon-moon {
+    margin-right: 10px;
+}
+
 video {
     width: 80%;
     max-width: 600px;

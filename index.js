@@ -17,6 +17,22 @@ async function setupCamera() {
     };
 }
 
+//SWITCH DU MODE JOUR:NUIT CHANGEMENT DU TOGGLE
+document.addEventListener('DOMContentLoaded', () => {
+    const modeSwitch = document.getElementById('mode-switch');
+    const body = document.body;
+
+    modeSwitch.addEventListener('change', () => {
+        if (modeSwitch.checked) {
+            body.classList.add('day-mode');
+            body.classList.remove('night-mode');
+        } else {
+            body.classList.remove('night-mode');
+            body.classList.add('day-mode');
+        }
+    });
+});
+
 async function getConnectedDevices(type) {
     const devices = await navigator.mediaDevices.enumerateDevices();
 

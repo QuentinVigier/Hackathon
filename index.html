@@ -14,14 +14,27 @@
   </head>
 
   <body>
-    <header id="header"></header>
-    <div class="video-container">
-      <h1>Real Time Detection App</h1>
+    <header id="header">
+        <h1>Real Time Detection App</h1>
+      <div class="toggle-container">
+        <input type="checkbox" id="mode-switch" class="mode-switch" />
+        <label for="mode-switch">
+          <span class="mode-on">
+            <img src="" alt="Sun" class="mode-icon" id="mode-sun" />
+          </span>
+          <span class="mode-off">
+            <img src="" alt="Moon" class="mode-icon" id="mode-icon" />
+          </span>
+        </label>
+      </div>
+    </header>
+
+    <div>
       <video id="video" width="640" autoplay playsinline></video>
-      <canvas id="canvas"></canvas> <br>
-    <button id="startButton">Start Camera</button>
-    <button id="capture">Capture Écran</button>
-</div>
+      <canvas id="canvas"></canvas> <br />
+      <button id="startButton">Start Camera</button>
+      <button id="capture">Capture Écran</button>
+    </div>
     <!--Dolma: <button id="stopButton">Capture Image</button> -->
     <div id="predictions"></div>
     <div id="results"></div>
