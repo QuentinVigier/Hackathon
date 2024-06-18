@@ -2,7 +2,7 @@
     --main-bg-color: #f9aad0;
     --main-bg-color: #ad53a6;
     --main-bg-color: #502779;
-  }
+}
 
 body {
     display: flex;
@@ -15,6 +15,8 @@ body {
     transition: background-color 0.5s, color 0.5s;
 }
 
+/* ------------------------------------------------- */
+/* CSS POUR LE SWITCH DAY MODE TO NIGHT MODE */
 body.day-mode {
     background-color: white;
     color: black;
@@ -25,20 +27,20 @@ body.night-mode {
     color: white;
 }
 
-.toogle-container {
+.toggle-container {
     position: fixed;
     top: 20px;
     right: 20px;
 }
 
-.mood-switch {
+.mode-switch {
     display: none;
 }
 
 .mode-label {
     display: inline-block;
     width: 60px;
-    height: 43px;
+    height: 34px;
     background-color: #ccc;
     border-radius: 34px;
     position: relative;
@@ -61,7 +63,6 @@ body.night-mode {
     transform: translateX(26px);
 }
 
-.mode-on,
 .mode-off {
     position: absolute;
     top: 50%;
@@ -70,14 +71,11 @@ body.night-mode {
     text-align: center;
     font-size: 18px;
     line-height: 1;
+    right: 10px;
 }
 
 .mode-on {
     left: 10px;
-}
-
-.mode-off {
-    right: 10px;
 }
 
 .mode-icon {
@@ -93,6 +91,8 @@ body.night-mode {
 #icon-moon {
     margin-right: 10px;
 }
+
+/* ------------------------------------------------- */
 
 video {
     width: 80%;

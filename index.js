@@ -6,26 +6,30 @@ let predictionsElement = document.getElementById('predictions');
 
 const startButton = document.getElementById('startButton');
 startButton.addEventListener('click', setupCamera);
-
-
+const results = document.getElementById('results'); 
+let selectedDevice = '';
 
 async function setupCamera() {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: selectedDevice.deviceId ? { exact: selectedDevice } : true } });
+    
+    console.log('selectedDevice', selectedDevice);
+    
     video.srcObject = stream;
     video.onloadedmetadata = () => {
         video.play();
     };
 }
 
-//SWITCH DU MODE JOUR:NUIT CHANGEMENT DU TOGGLE
+//SWITCH DU MODE JOUR/NUIT AU CHANGEMENT DU TOGGLE
+
 document.addEventListener('DOMContentLoaded', () => {
     const modeSwitch = document.getElementById('mode-switch');
     const body = document.body;
 
     modeSwitch.addEventListener('change', () => {
         if (modeSwitch.checked) {
-            body.classList.add('day-mode');
-            body.classList.remove('night-mode');
+            body.classList.remove('day-mode');
+            body.classList.add('night-mode');
         } else {
             body.classList.remove('night-mode');
             body.classList.add('day-mode');
@@ -33,16 +37,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-async function getConnectedDevices(type) {
+
+async function getConnectedDevices() {
     const devices = await navigator.mediaDevices.enumerateDevices();
 
-    // this filters the device that we are connected. 
-    return devices.filter(device => device.kind === type);
+ 
+    let cameraList="<div id='camSelect'><select id='camList'>"
+    devices.forEach(device => {
+        cameraList+=`<option value='${device.label}'>${device.label}</option>`
+    });
+    cameraList += "</select></div>";
    
+    let span = document.createElement('span');
+    span.innerHTML = cameraList;
+   
+    results.appendChild(span);
+    span.addEventListener('change', async() => {
+        let camType = await document.getElementById('camList').value
+
+            console.log('camType ', camType);
+        const deviceConnected = devices.filter(device => device.label === camType);
+        selectedDevice = deviceConnected;
+        console.log('deviceConnected', deviceConnected);
+        setupCamera();
+        
+    })
+    
 }
 
-const videoCameras = getConnectedDevices('videoinput');
+const videoCameras = getConnectedDevices();
 console.log('Cameras found:', videoCameras);
+
 
 //Chargement du modele COCO-SSD
 let model;
@@ -75,5 +100,6 @@ async function detectObjects() {
             `${prediction.class}`, prediction.bbox[0], prediction.bbox[1]);    
 })
 }
+
 
 

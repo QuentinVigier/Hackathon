@@ -12,22 +12,22 @@
       rel="stylesheet"
     />
   </head>
-
-  <body>
+<body>
     <header id="header">
-        <h1>Real Time Detection App</h1>
-      <div class="toggle-container">
-        <input type="checkbox" id="mode-switch" class="mode-switch" />
-        <label for="mode-switch">
-          <span class="mode-on">
-            <img src="" alt="Sun" class="mode-icon" id="mode-sun" />
-          </span>
-          <span class="mode-off">
-            <img src="" alt="Moon" class="mode-icon" id="mode-icon" />
-          </span>
-        </label>
-      </div>
+        <div class="toggle-container">
+            <input type="checkbox" id="mode-switch" class="mode-switch">
+            <label for="mode-switch" class="mode-label">
+                <span class="mode-on">
+                    <img src="images/sun.png" alt="Sun" class="mode-icon" id="icon-sun">
+                </span>
+                <span class="mode-off">
+                    <img src="images/moon.png" alt="Moon" class="mode-icon" id="icon-moon">
+                </span>
+            </label>
+        </div>
     </header>
+    <video id="video" width="640" autoplay playsinline></video>
+    <button id="startButton">Start Camera</button>
 
     <div>
       <video id="video" width="640" autoplay playsinline></video>
@@ -35,7 +35,7 @@
       <button id="startButton">Start Camera</button>
       <button id="capture">Capture Écran</button>
     </div>
-    <!--Dolma: <button id="stopButton">Capture Image</button> -->
+
     <div id="predictions"></div>
     <div id="results"></div>
 
