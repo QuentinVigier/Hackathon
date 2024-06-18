@@ -10,7 +10,8 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: #f0f0f0;;
+    font-family: "Poppins", sans-serif;
     transition: background-color 0.5s, color 0.5s;
 }
 
@@ -62,7 +63,6 @@ body.night-mode {
     transform: translateX(26px);
 }
 
-.mode-on,
 .mode-off {
     position: absolute;
     top: 50%;
@@ -71,14 +71,11 @@ body.night-mode {
     text-align: center;
     font-size: 18px;
     line-height: 1;
+    right: 10px;
 }
 
 .mode-on {
     left: 10px;
-}
-
-.mode-off {
-    right: 10px;
 }
 
 .mode-icon {
@@ -96,6 +93,7 @@ body.night-mode {
 }
 
 /* ------------------------------------------------- */
+
 video {
     width: 80%;
     max-width: 600px;
@@ -104,10 +102,20 @@ video {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.btn {
+h1 {
+    font-size: 2.5rem;
+    font-weight: 400; /* 600 ou 300 */
+    color: #502779;
+}
+
+
+button {
     width: 22.5rem;
     height: 3.75rem;
     border-radius: 1rem;
     background-color: #502779;
-    /* font-family: poppins; */
+    border: none;
+    color: #fff;
+    font-size: 1.25rem;
+    font-family: "Poppins", sans-serif;
 }
