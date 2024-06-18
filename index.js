@@ -11,4 +11,14 @@ async function setupCamera() {
     };
 }
 
-console.log('hello');
+async function getConnectedDevices(type) {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+
+    // this filters the device that we are connected. 
+    return devices.filter(device => device.kind === type);
+   
+}
+
+const videoCameras = getConnectedDevices('videoinput');
+console.log('Cameras found:', videoCameras);
+
