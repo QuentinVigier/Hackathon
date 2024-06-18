@@ -9,7 +9,19 @@
 </head>
 
 <body>
-    <header id="header"></header>
+    <header id="header">
+        <div class="toggle-container">
+            <input type="checkbox" id="mode-switch" class="mode-switch">
+            <label for="mode-switch" class="mode-label">
+                <span class="mode-on">
+                    <img src="images/sun.png" alt="Sun" class="mode-icon" id="icon-sun">
+                </span>
+                <span class="mode-off">
+                    <img src="images/moon.png" alt="Moon" class="mode-icon" id="icon-moon">
+                </span>
+            </label>
+        </div>
+    </header>
     <video id="video" width="640" autoplay playsinline></video>
     <button id="startButton">Start Camera</button>
 
