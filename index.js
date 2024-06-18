@@ -10,3 +10,10 @@ async function setupCamera() {
         video.play();
     };
 }
+
+//Léa:  Capture d'image
+captureButton.addEventListener('click', () => {
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    canvas.style.display = 'block';
+    detectObjects();
+});

@@ -11,6 +11,7 @@ body {
     height: 100vh;
     margin: 0;
     background-color: #f0f0f0;
+    font-family: "Poppins", sans-serif;
 }
 video {
     width: 80%;
@@ -20,10 +21,12 @@ video {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
+h1 {
+    font-weight: 400; /* 600 ou 300 */
+}
 .btn {
     width: 22.5rem;
     height: 3.75rem;
     border-radius: 1rem;
     background-color: #502779;
-    /* font-family: poppins; */
 }
