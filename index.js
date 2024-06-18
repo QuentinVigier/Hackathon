@@ -10,3 +10,5 @@ async function setupCamera() {
         video.play();
     };
 }
+
+console.log('hello');
