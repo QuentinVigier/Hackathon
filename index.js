@@ -1,10 +1,13 @@
 const startButton = document.getElementById('startButton');
 startButton.addEventListener('click', setupCamera);
 const results = document.getElementById('results'); 
-
+let selectedDevice = '';
 
 async function setupCamera() {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: selectedDevice.deviceId ? { exact: selectedDevice } : true } });
+    
+    console.log('selectedDevice', selectedDevice);
+    
     video.srcObject = stream;
     video.onloadedmetadata = () => {
         video.play();
@@ -48,6 +51,7 @@ async function getConnectedDevices() {
 
             console.log('camType ', camType);
         const deviceConnected = devices.filter(device => device.label === camType);
+        selectedDevice = deviceConnected;
         console.log('deviceConnected', deviceConnected);
         setupCamera();
         
