@@ -36,11 +36,11 @@ async function getConnectedDevices() {
     const devices = await navigator.mediaDevices.enumerateDevices();
 
  
-    let cameraList="<select id='camList'>"
+    let cameraList="<div id='camSelect'><select id='camList'>"
     devices.forEach(device => {
         cameraList+=`<option value='${device.label}'>${device.label}</option>`
     });
-    cameraList += "</select>";
+    cameraList += "</select></div>";
    
     let span = document.createElement('span');
     span.innerHTML = cameraList;
