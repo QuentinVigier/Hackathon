@@ -1,18 +1,38 @@
+/* SELECTION DES COULEURS UTILISEES DANS LE PROJET */
 :root {
     --main-bg-color: #f9aad0;
     --main-bg-color: #ad53a6;
     --main-bg-color: #502779;
 }
 
+/* ------------------------------------------------- */
+/* CSS POUR LE STYLE GENERIQUE DES ELEMENTS DU HTML */
 body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     height: 100vh;
     margin: 0;
     background-color: #f0f0f0;;
     font-family: "Poppins", sans-serif;
     transition: background-color 0.5s, color 0.5s;
+}
+button {
+    width: 22.5rem;
+    height: 3.75rem;
+    border-radius: 1rem;
+    background-color: #502779;
+    border: none;
+    color: #fff;
+    font-size: 1.25rem;
+    font-family: "Poppins", sans-serif;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 400; /* 600 ou 300 */
+    color: #502779;
 }
 
 /* ------------------------------------------------- */
@@ -84,38 +104,44 @@ body.night-mode {
 }
 
 #icon-sun {
-    margin-left: 10px;
-    margin-top: 2.5px;
+    margin-left: 2rem;
+    margin-top: 0.3rem;
 }
 
 #icon-moon {
-    margin-right: 10px;
+    margin-right: 0.7rem;
 }
 
 /* ------------------------------------------------- */
-
+/* CSS POUR LE COUNTENEUR, LA VIDEO ET DES BTNS EN DESSOUS */
+.flex-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.btns {
+    display: block;
+    margin-top: 1rem;
+}
 video {
-    width: 80%;
+    width: 100%;
     max-width: 600px;
     border: 2px solid #333;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-h1 {
-    font-size: 2.5rem;
-    font-weight: 400; /* 600 ou 300 */
-    color: #502779;
+/* ------------------------------------------------- */
+/* CSS POUR L'INPUT PERMETTANT DE CHOISIR LA WEBCAM A UTILISER */
+#results {
+    margin-top: 1rem;
 }
 
-
-button {
-    width: 22.5rem;
-    height: 3.75rem;
-    border-radius: 1rem;
-    background-color: #502779;
-    border: none;
-    color: #fff;
-    font-size: 1.25rem;
-    font-family: "Poppins", sans-serif;
+/* ------------------------------------------------- */
+/* CSS POUR LE CANVAS ET L'AFFICHAGE DES PREDICTIONS ET RESULTATS */
+canvas {
+    display: grid;
+    margin-top: 3rem;
 }

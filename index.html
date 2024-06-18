@@ -26,16 +26,18 @@
             </label>
         </div>
     </header>
-    
-    <div>
-      <video id="video" width="640" autoplay playsinline></video>
-      <canvas id="canvas"></canvas> <br />
+
+    <div class="flex-wrap">
+      <video id="video" autoplay playsinline></video>
+      <div id="results"></div>
+      <div class="btns">
       <button id="startButton">Start Camera</button>
       <button id="capture">Capture Écran</button>
     </div>
+    </div>
+    <canvas id="canvas"></canvas> <br />
 
     <div id="predictions"></div>
-    <div id="results"></div>
 
     <footer id="footer"></footer>
 
