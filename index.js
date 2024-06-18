@@ -4,6 +4,8 @@ let ctx = canvas.getContext('2d');
 let captureButton = document.getElementById('capture');
 let predictionsElement = document.getElementById('predictions');
 
+const objClassDiv = document.getElementById('objClass');
+
 const startButton = document.getElementById('startButton');
 startButton.addEventListener('click', setupCamera);
 const results = document.getElementById('results'); 
@@ -11,9 +13,7 @@ let selectedDevice = '';
 
 async function setupCamera() {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: selectedDevice.deviceId ? { exact: selectedDevice } : true } });
-    
-    console.log('selectedDevice', selectedDevice);
-    
+        
     video.srcObject = stream;
     video.onloadedmetadata = () => {
         video.play();
@@ -41,10 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
 async function getConnectedDevices() {
     const devices = await navigator.mediaDevices.enumerateDevices();
 
+ console.log('devices',devices);
  
-    let cameraList="<div id='camSelect'><select id='camList'>"
+    let cameraList = "<div id='camSelect'><select id='camList'><option></<option>";
     devices.forEach(device => {
-        cameraList+=`<option value='${device.label}'>${device.label}</option>`
+      
+        if (device.deviceId !== '') {
+             cameraList+=`<option value='${device.label}'>${device.label}</option>`
+
+        }
+           
     });
     cameraList += "</select></div>";
    
@@ -55,10 +61,8 @@ async function getConnectedDevices() {
     span.addEventListener('change', async() => {
         let camType = await document.getElementById('camList').value
 
-            console.log('camType ', camType);
         const deviceConnected = devices.filter(device => device.label === camType);
         selectedDevice = deviceConnected;
-        console.log('deviceConnected', deviceConnected);
         setupCamera();
         
     })
@@ -66,7 +70,6 @@ async function getConnectedDevices() {
 }
 
 const videoCameras = getConnectedDevices();
-console.log('Cameras found:', videoCameras);
 
 
 //Chargement du modele COCO-SSD
@@ -101,5 +104,27 @@ async function detectObjects() {
 })
 }
 
+// FILTRAGE PAR DIFFERENT CLASS D'OBJET
+
+const objClassList = ["Person", "Voiture", "Maison", "Arbes", "Animal", "Avoin", "Bateau", "Telephone", "Ordinateur"];
 
 
+
+
+let htmlObjClass = ``;
+
+objClassList.forEach(list => {
+    htmlObjClass += `<input type="checkbox" id="${list}" name="${list}" value="${list}">
+<label for="${list}"> ${list}</label><br>`;
+});
+
+
+
+objClassDiv.innerHTML += htmlObjClass;
+let selectedFilter = document.getElementById('objClass');
+let filter = [];
+selectedFilter.addEventListener('change', (e) => {
+    filter.push(e.target.value);
+    console.log('filter', filter);
+
+});
