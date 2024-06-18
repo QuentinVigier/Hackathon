@@ -10,7 +10,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: #f0f0f0;;
     font-family: "Poppins", sans-serif;
 }
 video {
@@ -22,11 +22,19 @@ video {
 }
 
 h1 {
+    font-size: 2.5rem;
     font-weight: 400; /* 600 ou 300 */
+    color: #502779;
 }
-.btn {
+
+
+button {
     width: 22.5rem;
     height: 3.75rem;
     border-radius: 1rem;
     background-color: #502779;
+    border: none;
+    color: #fff;
+    font-size: 1.25rem;
+    font-family: "Poppins", sans-serif;
 }
