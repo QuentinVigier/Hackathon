@@ -1,5 +1,7 @@
 let video = document.getElementById('video');
 let canvas = document.getElementById('canvas');
+const predictions = document.getElementById("predictions"); // Déclaration de predictionsElement
+
 let ctx = canvas.getContext('2d');
 let captureButton = document.getElementById('capture');
 let predictionsElement = document.getElementById('predictions');
@@ -7,13 +9,30 @@ let filterResult = document.getElementById("filterResult");
 const objClassDiv = document.getElementById('objClass');
 
 const startButton = document.getElementById('startButton');
-startButton.addEventListener('click', setupCamera);
-const results = document.getElementById('results'); 
+
+//momo
+startButton.addEventListener('click', async ()=>{
+    await loadModel();
+    setupCamera();
+
+    video.addEventListener("play", async () => {
+        function copievideo() {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          requestAnimationFrame(copievideo);
+          detectObjects();
+        
+        }
+        requestAnimationFrame(copievideo);
+      });
+});
+
+//
+const results = document.getElementById('results');
 let selectedDevice = '';
 
 async function setupCamera() {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: selectedDevice.deviceId ? { exact: selectedDevice } : undefined } });
-        
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: selectedDevice.deviceId ? { exact: selectedDevice } : undefined } });   
+
     video.srcObject = stream;
     video.onloadedmetadata = () => {
         video.play();
@@ -37,9 +56,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+//OPEN ET CLOSE DE LA FENETRE MODAL PERMETTANT D'ENVOYER UN EMAIL
+
+document.getElementById('btn-modal').addEventListener('click', () => {
+    document.getElementById('myModal').style.display = 'block';
+});
+document.getElementById('submit-email').addEventListener('click', () => {
+    document.getElementById('myModal').style.display = 'none';
+});
+
+document.getElementById('submit-email-cancel').addEventListener('click', () => {
+    document.getElementById('myModal').style.display = 'none';
+});
 
 async function getConnectedDevices() {
     const devices = await navigator.mediaDevices.enumerateDevices();
+
 
  console.log('devices',devices);
  
@@ -50,21 +82,18 @@ async function getConnectedDevices() {
              cameraList+=`<option value='${device.label}'>${device.label}</option>`
 
         }
-           
     });
     cameraList += "</select></div>";
-   
+
     let span = document.createElement('span');
     span.innerHTML = cameraList;
-   
-    results.appendChild(span);
-    span.addEventListener('change', async() => {
-        let camType = await document.getElementById('camList').value
 
+    results.appendChild(span);
+    span.addEventListener('change', async () => {
+        let camType = await document.getElementById('camList').value
         const deviceConnected = devices.filter(device => device.label === camType);
         selectedDevice = deviceConnected;        
     })
-    
 }
 
 const videoCameras = getConnectedDevices();
@@ -80,7 +109,7 @@ loadModel();
 
 //Léa:  Capture d'image
 captureButton.addEventListener('click', () => {
-   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     canvas.style.display = 'block';
     detectObjects();
     
@@ -95,17 +124,17 @@ async function detectObjects() {
         ctx.beginPath();
         ctx.rect(...prediction.bbox)
         ctx.lineWidth = 2;
-        ctx.strokeStyle ='red';
-        ctx.fillStyle ='red';
+        ctx.strokeStyle = 'red';
+        ctx.fillStyle = 'red';
         ctx.stroke();
         ctx.fillText(
             `${prediction.class}`, prediction.bbox[0], prediction.bbox[1]);
+
         let img = canvas.toDataURL('image/png');
         console.log('img', canvas.toDataURL('image/png'));
         
         saveData(img,prediction);
     })
-   
 
 }
 
