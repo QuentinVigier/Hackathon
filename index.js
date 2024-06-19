@@ -6,14 +6,14 @@ let predictionsElement = document.getElementById('predictions');
 
 const startButton = document.getElementById('startButton');
 startButton.addEventListener('click', setupCamera);
-const results = document.getElementById('results'); 
+const results = document.getElementById('results');
 let selectedDevice = '';
 
 async function setupCamera() {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: selectedDevice.deviceId ? { exact: selectedDevice } : true } });
-    
+
     console.log('selectedDevice', selectedDevice);
-    
+
     video.srcObject = stream;
     video.onloadedmetadata = () => {
         video.play();
@@ -37,32 +37,44 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+//OPEN ET CLOSE DE LA FENETRE MODAL PERMETTANT D'ENVOYER UN EMAIL
+
+document.getElementById('btn-modal').addEventListener('click', () => {
+    document.getElementById('myModal').style.display = 'block';
+});
+document.getElementById('submit-email').addEventListener('click', () => {
+    document.getElementById('myModal').style.display = 'none';
+});
+
+document.getElementById('submit-email-cancel').addEventListener('click', () => {
+    document.getElementById('myModal').style.display = 'none';
+});
 
 async function getConnectedDevices() {
     const devices = await navigator.mediaDevices.enumerateDevices();
 
- 
-    let cameraList="<div id='camSelect'><select id='camList'>"
+
+    let cameraList = "<div id='camSelect'><select id='camList'>"
     devices.forEach(device => {
-        cameraList+=`<option value='${device.label}'>${device.label}</option>`
+        cameraList += `<option value='${device.label}'>${device.label}</option>`
     });
     cameraList += "</select></div>";
-   
+
     let span = document.createElement('span');
     span.innerHTML = cameraList;
-   
+
     results.appendChild(span);
-    span.addEventListener('change', async() => {
+    span.addEventListener('change', async () => {
         let camType = await document.getElementById('camList').value
 
-            console.log('camType ', camType);
+        console.log('camType ', camType);
         const deviceConnected = devices.filter(device => device.label === camType);
         selectedDevice = deviceConnected;
         console.log('deviceConnected', deviceConnected);
         setupCamera();
-        
+
     })
-    
+
 }
 
 const videoCameras = getConnectedDevices();
@@ -79,7 +91,7 @@ loadModel();
 
 //Léa:  Capture d'image
 captureButton.addEventListener('click', () => {
-   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     canvas.style.display = 'block';
     detectObjects();
 });
@@ -93,12 +105,12 @@ async function detectObjects() {
         ctx.beginPath();
         ctx.rect(...prediction.bbox)
         ctx.lineWidth = 2;
-        ctx.strokeStyle ='red';
-        ctx.fillStyle ='red';
+        ctx.strokeStyle = 'red';
+        ctx.fillStyle = 'red';
         ctx.stroke();
         ctx.fillText(
-            `${prediction.class}`, prediction.bbox[0], prediction.bbox[1]);    
-})
+            `${prediction.class}`, prediction.bbox[0], prediction.bbox[1]);
+    })
 }
 
 
