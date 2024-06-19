@@ -3,6 +3,7 @@ let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 let captureButton = document.getElementById('capture');
 let predictionsElement = document.getElementById('predictions');
+let filterResult = document.getElementById("filterResult");
 
 const objClassDiv = document.getElementById('objClass');
 
@@ -131,7 +132,65 @@ let filters = [];
 selectedFilter.addEventListener('change', (e) => {
     filters.push(e.target.value);
     filters.forEach(filter => {
-        // for all the filters selected, check the predictions for the selected filters availability. 
+        // for all the filters selected, check the predictions for the selected filters availability.
+        console.log('filter', filter);
+        let connection = window.indexedDB.open("predictionDB", 3);
+        connection.onerror = function (e) {
+            // Faire quelque chose avec connection.errorCode !
+            console.log('theres error ', e);
+            
+          };
+          connection.onsuccess =  function (e) {
+                const db = e.target.result;
+                console.log('db', db.transaction);
+                const transaction = db.transaction(['predictionTable'], 'readonly');
+                const objectStore = transaction.objectStore('predictionTable');
+            //   const getAll =  objectStore.getAll().result.value;
+            //   console.log('getAll', getAll);
+              const getRequest = objectStore.get(1);
+              console.log('getRequest', getRequest);
+              
+              getRequest.onsuccess = function (event) {
+                  const data = event.target.result;
+                  console.log('data',data);
+                  
+                if (data) {
+                    console.log('Retrieved data:', data);
+                    
+                    // Access specific properties
+                    const imgData = data.imgDB;
+                    const predictions = data[1].predictions;
+                    const bbox = predictions.bbox;
+                    const classLabel = predictions.class;
+                    const score = predictions.score;
+                    const compteurDb = data.compteurDb;
+        
+                    console.log('Image Data:', imgData);
+                    console.log('Bounding Box:', bbox);
+                    console.log('Class:', classLabel);
+                    console.log('Score:', score);
+                    console.log('Compteur DB:', compteurDb);
+                } } 
+                  
+            
+                // const lowerBound = 25;
+                // const upperBound = Infinity; // No upper bound for age condition
+            
+                // const range = IDBKeyRange.lowerBound(lowerBound);
+                // const request = index.openCursor(range);
+            
+                // request.onsuccess = function(event) {
+                //     const cursor = event.target.result;
+                //     if (cursor) {
+                //         const data = cursor.value;
+                //         console.log('Retrieved data:', data);
+                //         cursor.continue(); // Move to the next record
+                //     } else {
+                //         console.log('No more matching records');
+                //     }
+                // };
+              
+            }
     });
 });
 
@@ -152,6 +211,7 @@ async function saveData(img,pre) {
  
           //update of the db if necessary is over here
           const db = e.target.result;
+          
           let predictionToSave = [
               { imgDB: imgDB },
               {predictions: prediction}
