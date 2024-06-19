@@ -12,7 +12,7 @@ const results = document.getElementById('results');
 let selectedDevice = '';
 
 async function setupCamera() {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: selectedDevice.deviceId ? { exact: selectedDevice } : true } });
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: selectedDevice.deviceId ? { exact: selectedDevice } : undefined } });
         
     video.srcObject = stream;
     video.onloadedmetadata = () => {
@@ -83,6 +83,7 @@ captureButton.addEventListener('click', () => {
    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     canvas.style.display = 'block';
     detectObjects();
+    
 });
 
 // Dectection objet
@@ -98,8 +99,11 @@ async function detectObjects() {
         ctx.fillStyle ='red';
         ctx.stroke();
         ctx.fillText(
-            `${prediction.class}`, prediction.bbox[0], prediction.bbox[1]);    
-})
+            `${prediction.class}`, prediction.bbox[0], prediction.bbox[1]);
+        saveData(prediction);
+    })
+   
+
 }
 
 // FILTRAGE PAR DIFFERENT CLASS D'OBJET
@@ -127,3 +131,44 @@ selectedFilter.addEventListener('change', (e) => {
         // for all the filters selected, check the predictions for the selected filters availability. 
     });
 });
+
+
+
+// INDEX DB
+async function saveData(pre) {
+    let prediction = pre;
+  
+    let connection = window.indexedDB.open("predictionDB", 3);
+    connection.onerror = function (e) {
+        // Faire quelque chose avec request.errorCode !
+        console.log('theres error ', e);
+        
+      };
+      connection.onsuccess = function (e) {
+ 
+          //update of the db if necessary is over here
+
+          const db = e.target.result;
+          const transaction = db.transaction(['predictionTable'], 'readwrite');
+          const objectStore = transaction.objectStore('predictionTable');
+          objectStore.transaction.oncomplete = (e) => {
+              // Store values in the newly created objectStore.
+              const predictionObjectStore = db
+                .transaction("predictionTable", "readwrite")
+                .objectStore("predictionTable");
+               
+              predictionObjectStore.put(prediction);
+             
+             
+            };
+  
+     
+    };
+    connection.onupgradeneeded = function (e) {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains('predictionTable')) {
+            db.createObjectStore('predictionTable', { keyPath: 'compteurDb', autoIncrement: true });
+        }
+    };
+   
+}
