@@ -62,9 +62,7 @@ async function getConnectedDevices() {
         let camType = await document.getElementById('camList').value
 
         const deviceConnected = devices.filter(device => device.label === camType);
-        selectedDevice = deviceConnected;
-        setupCamera();
-        
+        selectedDevice = deviceConnected;        
     })
     
 }
@@ -122,9 +120,10 @@ objClassList.forEach(list => {
 
 objClassDiv.innerHTML += htmlObjClass;
 let selectedFilter = document.getElementById('objClass');
-let filter = [];
+let filters = [];
 selectedFilter.addEventListener('change', (e) => {
-    filter.push(e.target.value);
-    console.log('filter', filter);
-
+    filters.push(e.target.value);
+    filters.forEach(filter => {
+        // for all the filters selected, check the predictions for the selected filters availability. 
+    });
 });
