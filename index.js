@@ -4,7 +4,6 @@ let ctx = canvas.getContext('2d');
 let captureButton = document.getElementById('capture');
 let predictionsElement = document.getElementById('predictions');
 let filterResult = document.getElementById("filterResult");
-
 const objClassDiv = document.getElementById('objClass');
 
 const startButton = document.getElementById('startButton');
@@ -112,113 +111,83 @@ async function detectObjects() {
 
 // FILTRAGE PAR DIFFERENT CLASS D'OBJET
 
-const objClassList = ["Person", "Voiture", "Maison", "Arbes", "Animal", "Avoin", "Bateau", "Telephone", "Ordinateur"];
-
-
-
-
+const objClassList = ["Person", "Voiture", "Maison", "Arbes", "Animal", "Avoin", "Bateau", "Cell phone", "Ordinateur"];
 let htmlObjClass = ``;
 
+
+//Creating checkbox with different filter class
 objClassList.forEach(list => {
     htmlObjClass += `<input type="checkbox" id="${list}" name="${list}" value="${list}">
 <label for="${list}"> ${list}</label><br>`;
 });
-
-
-
 objClassDiv.innerHTML += htmlObjClass;
+
+
 let selectedFilter = document.getElementById('objClass');
 let filters = [];
+
 selectedFilter.addEventListener('change', (e) => {
+    //filters contain the list of all the check box selected by the user 
     filters.push(e.target.value);
+     // for all the filters selected, check the predictions for the selected filters availability.
     filters.forEach(filter => {
-        // for all the filters selected, check the predictions for the selected filters availability.
-        console.log('filter', filter);
+        filter = filter.toLowerCase();
+        // here our DB name is predictionDB and we are opening the connection to the DB
         let connection = window.indexedDB.open("predictionDB", 3);
         connection.onerror = function (e) {
-            // Faire quelque chose avec connection.errorCode !
             console.log('theres error ', e);
-            
           };
-          connection.onsuccess =  function (e) {
+        connection.onsuccess = function (e) {
+            filterResult.innerHTML = '';
                 const db = e.target.result;
-                console.log('db', db.transaction);
                 const transaction = db.transaction(['predictionTable'], 'readonly');
                 const objectStore = transaction.objectStore('predictionTable');
-            //   const getAll =  objectStore.getAll().result.value;
-            //   console.log('getAll', getAll);
-              const getRequest = objectStore.get(1);
-              console.log('getRequest', getRequest);
-              
-              getRequest.onsuccess = function (event) {
-                  const data = event.target.result;
-                  console.log('data',data);
-                  
-                if (data) {
-                    console.log('Retrieved data:', data);
-                    
-                    // Access specific properties
-                    const imgData = data.imgDB;
-                    const predictions = data[1].predictions;
-                    const bbox = predictions.bbox;
-                    const classLabel = predictions.class;
-                    const score = predictions.score;
-                    const compteurDb = data.compteurDb;
-        
-                    console.log('Image Data:', imgData);
-                    console.log('Bounding Box:', bbox);
-                    console.log('Class:', classLabel);
-                    console.log('Score:', score);
-                    console.log('Compteur DB:', compteurDb);
-                } } 
-                  
-            
-                // const lowerBound = 25;
-                // const upperBound = Infinity; // No upper bound for age condition
-            
-                // const range = IDBKeyRange.lowerBound(lowerBound);
-                // const request = index.openCursor(range);
-            
-                // request.onsuccess = function(event) {
-                //     const cursor = event.target.result;
-                //     if (cursor) {
-                //         const data = cursor.value;
-                //         console.log('Retrieved data:', data);
-                //         cursor.continue(); // Move to the next record
-                //     } else {
-                //         console.log('No more matching records');
-                //     }
-                // };
-              
+                const getAll =  objectStore.getAll();
+               
+            getAll.onsuccess = function (evt) {
+                  //Here our datas contain all the predictionTable data
+                const datas = evt.target.result;               
+                if (datas) {             
+                    let filterDiv = ``;
+                    let firstInCap = filter.charAt(0).toUpperCase() + filter.slice(1);
+                    const idFiltre = document.getElementById(firstInCap);
+                        for (let index = 0; index < datas.length; index++) {
+                           if (datas[index][1].predictions.class === filter.toLowerCase() && idFiltre.checked) {
+                                filterDiv += `<div id='result'><img id='filtreImg' src='${datas[index][0].imgDB}'/></div>`;             
+                            } 
+                                                       
+                        }
+                    if (filterDiv == '') {
+                        filterDiv += '<p>your searched items is not available in DB</p>';
+                    }
+                    filterResult.innerHTML = filterDiv;
+                    } 
+                }
             }
     });
 });
 
 
 
-// INDEX DB
+// INDEX DB saving data
 async function saveData(img,pre) {
     let prediction = pre;
     let imgDB = img;
   
     let connection = window.indexedDB.open("predictionDB", 3);
     connection.onerror = function (e) {
-        // Faire quelque chose avec connection.errorCode !
         console.log('theres error ', e);
-        
       };
       connection.onsuccess = function (e) {
- 
-          //update of the db if necessary is over here
           const db = e.target.result;
-          
           let predictionToSave = [
               { imgDB: imgDB },
-              {predictions: prediction}
-              
+              {predictions: prediction}          
           ]
+          //first of all open the transaction and object store of the DB
           const transaction = db.transaction(['predictionTable'], 'readwrite');
           const objectStore = transaction.objectStore('predictionTable');
+          //if successful opening of the DB 
           objectStore.transaction.oncomplete = (e) => {
               // Store values in the DB already present 
               const predictionObjectStore = db
@@ -235,9 +204,7 @@ async function saveData(img,pre) {
         if (!db.objectStoreNames.contains('predictionTable')) {
              db.createObjectStore('predictionTable', { keyPath: 'compteurDb', autoIncrement: true },{imgDB});
             
-        }
-
-      
+        }   
         
     };
    
