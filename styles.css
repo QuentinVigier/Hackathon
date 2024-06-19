@@ -29,6 +29,7 @@ button {
     color: #0009;
     font-size: 1.25rem;
     font-family: "Poppins", sans-serif;
+    cursor: pointer;
 }
 
 h1 {
@@ -171,6 +172,13 @@ body.night-mode {
     justify-content: center;
     align-items: center;
     width: 100%;
+    height: auto;
+}
+#flex-wrap-video {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 .btns {
     display: block;
