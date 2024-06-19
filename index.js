@@ -100,7 +100,10 @@ async function detectObjects() {
         ctx.stroke();
         ctx.fillText(
             `${prediction.class}`, prediction.bbox[0], prediction.bbox[1]);
-        saveData(prediction);
+        let img = canvas.toDataURL('image/png');
+        console.log('img', canvas.toDataURL('image/png'));
+        
+        saveData(img,prediction);
     })
    
 
@@ -135,40 +138,47 @@ selectedFilter.addEventListener('change', (e) => {
 
 
 // INDEX DB
-async function saveData(pre) {
+async function saveData(img,pre) {
     let prediction = pre;
+    let imgDB = img;
   
     let connection = window.indexedDB.open("predictionDB", 3);
     connection.onerror = function (e) {
-        // Faire quelque chose avec request.errorCode !
+        // Faire quelque chose avec connection.errorCode !
         console.log('theres error ', e);
         
       };
       connection.onsuccess = function (e) {
  
           //update of the db if necessary is over here
-
           const db = e.target.result;
+          let predictionToSave = [
+              { imgDB: imgDB },
+              {predictions: prediction}
+              
+          ]
           const transaction = db.transaction(['predictionTable'], 'readwrite');
           const objectStore = transaction.objectStore('predictionTable');
           objectStore.transaction.oncomplete = (e) => {
-              // Store values in the newly created objectStore.
+              // Store values in the DB already present 
               const predictionObjectStore = db
                 .transaction("predictionTable", "readwrite")
                 .objectStore("predictionTable");
                
-              predictionObjectStore.put(prediction);
-             
-             
+              predictionObjectStore.put(predictionToSave); 
             };
-  
-     
     };
     connection.onupgradeneeded = function (e) {
         const db = e.target.result;
+      
+        //Creation of DB only if it doent exist already. 
         if (!db.objectStoreNames.contains('predictionTable')) {
-            db.createObjectStore('predictionTable', { keyPath: 'compteurDb', autoIncrement: true });
+             db.createObjectStore('predictionTable', { keyPath: 'compteurDb', autoIncrement: true },{imgDB});
+            
         }
+
+      
+        
     };
    
 }
