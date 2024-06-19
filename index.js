@@ -1,11 +1,30 @@
 let video = document.getElementById('video');
 let canvas = document.getElementById('canvas');
+const predictions = document.getElementById("predictions"); // Déclaration de predictionsElement
+
 let ctx = canvas.getContext('2d');
 let captureButton = document.getElementById('capture');
 let predictionsElement = document.getElementById('predictions');
 
 const startButton = document.getElementById('startButton');
-startButton.addEventListener('click', setupCamera);
+
+//momo
+startButton.addEventListener('click', async ()=>{
+    await loadModel();
+    setupCamera();
+
+    video.addEventListener("play", async () => {
+        function copievideo() {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          requestAnimationFrame(copievideo);
+          detectObjects();
+        
+        }
+        requestAnimationFrame(copievideo);
+      });
+});
+
+//
 const results = document.getElementById('results');
 let selectedDevice = '';
 
@@ -110,6 +129,8 @@ async function detectObjects() {
         ctx.stroke();
         ctx.fillText(
             `${prediction.class}`, prediction.bbox[0], prediction.bbox[1]);
+            predictionsElement.innerHTML += prediction.class
+
     })
 }
 
