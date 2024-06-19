@@ -14,6 +14,8 @@
   </head>
 <body>
     <header id="header">
+      <h1>HACKATHON</h1>
+      <button id="btn-modal">Recevoir un mail</button>
         <div class="toggle-container">
             <input type="checkbox" id="mode-switch" class="mode-switch">
             <label for="mode-switch" class="mode-label">
@@ -26,16 +28,29 @@
             </label>
         </div>
     </header>
-    
-    <div>
-      <video id="video" width="640" autoplay playsinline></video>
-      <canvas id="canvas"></canvas> <br />
+
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+          <h1>Entrez votre adresse e-mail</h1>
+          <input type="email" id="emailInput" placeholder="Entrez votre e-mail" required>
+          <br><br>
+          <button id="submit-email">Recevoir un email</button>
+          <br><br>
+          <button id="submit-email-cancel">Annuler</button>
+      </div>
+  </div>
+
+    <div class="flex-wrap">
+      <video id="video" autoplay playsinline></video>
+      <div id="results"></div>
+      <div class="btns">
       <button id="startButton">Start Camera</button>
       <button id="capture">Capture Écran</button>
     </div>
+    </div>
+    <canvas id="canvas"></canvas> <br />
 
     <div id="predictions"></div>
-    <div id="results"></div>
 
     <footer id="footer"></footer>
 
