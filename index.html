@@ -42,20 +42,20 @@
   <div class="flex-wrap">
     <div id="flex-wrap-video">
       <div id="predictions"></div>
-        <canvas id="canvas"></canvas>
+        <canvas id="canvasVideo"></canvas>
       <video id="video" autoplay playsinline></video>
     </div>
     <div id="results"></div>
+    <div id="objClass"></div>
+    <div id="filterResult"></div>
     <div class="btns">
       <button id="startButton">Start Camera</button>
       <button id="capture">Capture Écran</button>
-
-
     </div>
   </div>
 
-  <!-- <div id="predictions"></div> -->
-
+  <canvas id="images"></canvas>
+  <div id="predictionsImage"></div>
   <footer id="footer"></footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
