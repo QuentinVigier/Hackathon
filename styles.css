@@ -1,10 +1,14 @@
 /* SELECTION DES COULEURS UTILISEES DANS LE PROJET */
 :root {
     --main-bg-color: #D8EFD3;
-    --main-bg-color: #95D2B3;
-    --main-bg-color: #55AD9B;
-    --main-bg-color: #F1F8E8;
-    --main-bg-color: #ADD899;
+    --secondary-bg-color: #95D2B3;
+    --accent-color: #55AD9B;
+    --light-bg-color: #F1F8E8;
+    --highlight-color: #ADD899;
+    --text-color: #0009;
+    --button-bg-color: #F1F8E8;
+    --button-text-color: #000;
+    --modal-bg-color: rgba(0, 0, 0, 0.5);
 }
 
 /* ------------------------------------------------- */
@@ -14,35 +18,41 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 100vh;
-    background: linear-gradient(to bottom, #D8EFD3, #95D2B3);
+    min-height: 100vh;
+    background: linear-gradient(to bottom, var(--main-bg-color), var(--secondary-bg-color));
     margin: 0;
     font-family: "Poppins", sans-serif;
     transition: background-color 2s, color 2s;
+    color: var(--text-color);
 }
 button {
     width: 22.5rem;
     height: 3.75rem;
     border-radius: 1rem;
-    background-color: #F1F8E8;
+    background-color: var(--button-bg-color);
     border: none;
-    color: #0009;
+    color: var(--button-text-color);
     font-size: 1.25rem;
     font-family: "Poppins", sans-serif;
     cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+button:hover {
+    background-color: var(--highlight-color);
+    color: white;
 }
 
 h1 {
     font-size: 2.5rem;
     font-weight: 400; /* 600 ou 300 */
-    color: #0009;
+    color: var(--text-color);
 }
 
-header {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+h2 {
+    font-size: 1.5rem;
+    font-weight: 300; 
+    color: var(--text-color);
 }
 
 header button {
@@ -54,7 +64,13 @@ input, select {
     background-color: #f0f0f0; 
     border: 1px solid #ccc; 
     padding: 8px; 
-    font-size: 14px; 
+    font-size: 14px;
+    border-radius: 5px;
+    outline: none; 
+}
+
+footer {
+    margin-bottom: 2rem;
 }
 
 /* ------------------------------------------------- */
@@ -71,31 +87,48 @@ input, select {
     border: 2px solid #55AD9B;
     border-radius: 20px;
     backdrop-filter: blur(10px);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-    background: transparent;
+    background: var(--modal-bg-color);
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: var(--main-bg-color);
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
+    border-radius: 10px;
     width: 80%;
     max-width: 600px;
     text-align: center;
     position: relative;
     background-color: #D8EFD3;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 /* ------------------------------------------------- */
 /* CSS POUR LE SWITCH DAY MODE TO NIGHT MODE */
 body.day-mode {
-    background: linear-gradient(to bottom, #D8EFD3, #95D2B3);
-    color: black;
+    background: linear-gradient(to bottom, var(--main-bg-color), var(--secondary-bg-color));
+    color: var(--text-color);
+}
+
+body.night-mode button {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
 }
 
 body.night-mode {
-    background: linear-gradient(to bottom, #ADD899, #55AD9B);
+    background: linear-gradient(to bottom, var(--highlight-color), var(--accent-color));
+    color: white;
+}
+
+body.day-mode button {
+    background-color: var(--accent-color);
     color: white;
 }
 
@@ -184,23 +217,69 @@ body.night-mode {
     display: block;
     margin-top: 1rem;
 }
-video {
+video, #canvasVideo {
     width: 100%;
     max-width: 600px;
-    border: 2px solid #333;
+    border: 2px solid var(--accent-color);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 /* ------------------------------------------------- */
-/* CSS POUR L'INPUT PERMETTANT DE CHOISIR LA WEBCAM A UTILISER */
+/* CSS POUR L'INPUT PERMETTANT DE CHOISIR LA WEBCAM A UTILISER ET LA LISTE DE FILTRE */
 #results {
     margin-top: 1rem;
 }
 
+.grid-container-objClass {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem; 
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+}
+
 /* ------------------------------------------------- */
 /* CSS POUR LE CANVAS ET L'AFFICHAGE DES PREDICTIONS ET RESULTATS */
-canvas {
+#canvasVideo {
+    margin-right: 2rem;
+    margin-left: 2rem;
+}
+
+#images {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+#reultats-affichage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* ------------------------------------------------- */
+/* CSS POUR L'AFFICHAGE DES CPATURES D'ECRAN ET LA SELECTION */
+.grid-wrap {
     display: grid;
-    margin-top: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    margin: 0 auto;
+    max-width: 1300px;
+}
+
+.capture-card {
+    border: 5px solid var(--main-bg-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.capture-card img {
+    width: auto;
+    height: 100%;
 }

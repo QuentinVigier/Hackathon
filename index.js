@@ -66,19 +66,48 @@ async function setupCamera() {
 
 //SWITCH DU MODE JOUR/NUIT AU CHANGEMENT DU TOGGLE
 
-document.addEventListener('DOMContentLoaded', () => {
-    const modeSwitch = document.getElementById('mode-switch');
-    const body = document.body;
+window.onload = function() {
+    initializeMode();
+};
 
-    modeSwitch.addEventListener('change', () => {
-        if (modeSwitch.checked) {
-            body.classList.remove('day-mode');
-            body.classList.add('night-mode');
-        } else {
-            body.classList.remove('night-mode');
-            body.classList.add('day-mode');
-        }
-    });
+document.getElementById('mode-switch').addEventListener('change', function() {
+    updateMode();
+});
+
+function initializeMode() {
+    if (document.getElementById('mode-switch').checked) {
+        document.body.classList.add('night-mode');
+        document.body.classList.remove('day-mode');
+    } else {
+        document.body.classList.add('day-mode');
+        document.body.classList.remove('night-mode');
+    }
+}
+
+function updateMode() {
+    if (document.getElementById('mode-switch').checked) {
+        document.body.classList.add('night-mode');
+        document.body.classList.remove('day-mode');
+    } else {
+        document.body.classList.add('day-mode');
+        document.body.classList.remove('night-mode');
+    }
+}
+
+//REDIMENSIONNER LA TAILLE DU CANVAS VIDEO POUR QU'ELLE SOIT EGALE A CELLE DE LA VIDEO
+document.addEventListener("DOMContentLoaded", function() {
+    function matchCanvasToVideoSize() {
+        canvasVideo.width = video.videoWidth;
+        canvasVideo.height = video.videoHeight;
+    }
+
+    video.addEventListener('loadedmetadata', matchCanvasToVideoSize);
+    window.addEventListener('resize', matchCanvasToVideoSize);
+
+    // Ensure initial size match if video is already loaded
+    if (video.readyState >= 1) {
+        matchCanvasToVideoSize();
+    }
 });
 
 //OPEN ET CLOSE DE LA FENETRE MODAL PERMETTANT D'ENVOYER UN EMAIL
@@ -100,9 +129,11 @@ async function getConnectedDevices() {
     const devices = await navigator.mediaDevices.enumerateDevices();
 
 
-    let cameraList = "<div id='camSelect'><select id='camList'>"
+    let cameraList = "<div id='camSelect'><select id='camList'><option></option>";
     devices.forEach(device => {
-        cameraList += `<option value='${device.label}'>${device.label}</option>`
+        if (device.deviceId!==""){
+            cameraList += `<option value='${device.label}'>${device.label}</option>`
+        }
     });
     cameraList += "</select></div>";
 
@@ -162,15 +193,16 @@ async function detectObjects() {
 }
 
 // FILTRAGE PAR DIFFERENT CLASS D'OBJET
-
-const objClassList = ["Person", "Voiture", "Maison", "Arbes", "Animal", "Avoin", "Bateau", "Cell phone", "Ordinateur"];
+const objClassList = ["Person", "Voiture", "Maison", "Arbes", "Animal", "Avion", "Bateau", "Cell phone", "Ordinateur"];
 let htmlObjClass = ``;
 
 
 //Creating checkbox with different filter class
 objClassList.forEach(list => {
-    htmlObjClass += `<input type="checkbox" id="${list}" name="${list}" value="${list}">
-<label for="${list}"> ${list}</label><br>`;
+    htmlObjClass += `<div class="checkbox-item">
+        <input type="checkbox" id="${list}" name="${list}" value="${list}">
+        <label for="${list}"> ${list}</label>
+    </div>`;
 });
 objClassDiv.innerHTML += htmlObjClass;
 
@@ -218,7 +250,7 @@ selectedFilter.addEventListener('change', (e) => {
 
                         if (datas[index][1].predictions.class === filter.toLowerCase() && idFiltre.checked) {
                             console.log('inside if');
-                            filterDiv += `<div id='result'><img id='filtreImg' src='${datas[index][0].imgDB}'/></div>`;
+                            filterDiv += `<div id='result' class="capture-card"><img id='filtreImg' src='${datas[index][0].imgDB}'/></div>`;
 
                         }
                         
