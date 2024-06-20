@@ -195,8 +195,6 @@ async function detectObjects() {
 // FILTRAGE PAR DIFFERENT CLASS D'OBJET
 const objClassList = ["Person", "Voiture", "Maison", "Arbes", "Animal", "Avion", "Bateau", "Cell phone", "Ordinateur"];
 let htmlObjClass = ``;
-
-
 //Creating checkbox with different filter class
 objClassList.forEach(list => {
     htmlObjClass += `<div class="checkbox-item">
@@ -205,61 +203,41 @@ objClassList.forEach(list => {
     </div>`;
 });
 objClassDiv.innerHTML += htmlObjClass;
-
-
 let selectedFilter = document.getElementById('objClass');
 let filters = [];
 selectedFilter.addEventListener('change', (e) => {
     filterResult.innerHTML = ' ';
-    filters.push(e.target.value);
+    filters.includes(e.target.value)? filters = filters.filter(element => element !== e.target.value):filters.push(e.target.value);
+    console.log('filters', filters);
+    
     let filterDiv = '';
     filters.forEach(filter => {
-
         filter = filter.toLowerCase();
-        console.log('filter', filter);
-
         // for all the filters selected, check the predictions for the selected filters availability.
-        console.log('filter', filter);
         let connection = window.indexedDB.open("predictionDB", 3);
         connection.onerror = function (e) {
             // Faire quelque chose avec connection.errorCode !
             console.log('theres error ', e);
-
         };
         connection.onsuccess = function (e) {
             const db = e.target.result;
             const transaction = db.transaction(['predictionTable'], 'readonly');
             const objectStore = transaction.objectStore('predictionTable');
             const getAll = objectStore.getAll();
-
             getAll.onsuccess = function (evt) {
                 const datas = evt.target.result;
-
                 if (datas) {
                     console.log('Retrieved data:', datas);
-
-                    console.log('filtre', filter.charAt(0).toUpperCase() + filter.slice(1));
                     let fCap = filter.charAt(0).toUpperCase() + filter.slice(1);
                     const idFiltre = document.getElementById(fCap);
-                    console.log('idFiltre', idFiltre);
                     for (let index = 0; index < datas.length; index++) {
-
-
-                        console.log('datas[index][1].predictions.class', datas[index][1].predictions.class);
-                        console.log('filter.toLowerCase()', filter.toLowerCase());
-
                         if (datas[index][1].predictions.class === filter.toLowerCase() && idFiltre.checked) {
                             console.log('inside if');
                             filterDiv += `<div id='result' class="capture-card"><img id='filtreImg' src='${datas[index][0].imgDB}'/></div>`;
-
                         }
-                        
                     }
-
                 }
-
                 filterResult.innerHTML = filterDiv;
-
             }
         }
     });
@@ -274,19 +252,15 @@ async function saveData(img, pre) {
     connection.onerror = function (e) {
         // Faire quelque chose avec connection.errorCode !
         console.log('theres error ', e);
-
     };
     connection.onsuccess = function (e) {
-
         //update of the db if necessary is over here
         const db = e.target.result;
-
         let predictionToSave = [
             { imgDB: imgDB },
             { predictions: prediction }
 
         ]
-
         // Store values in the DB already present 
         const predictionObjectStore = db
             .transaction("predictionTable", "readwrite")
@@ -296,7 +270,6 @@ async function saveData(img, pre) {
     };
     connection.onupgradeneeded = function (e) {
         const db = e.target.result;
-
         //Creation of DB only if it doent exist already. 
         if (!db.objectStoreNames.contains('predictionTable')) {
             db.createObjectStore('predictionTable', { keyPath: 'compteurDb', autoIncrement: true });
