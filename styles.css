@@ -5,10 +5,11 @@
   --accent-color: #55ad9b;
   --light-bg-color: #f1f8e8;
   --highlight-color: #add899;
-  --text-color: #0009;
   --button-bg-color: #f1f8e8;
   --button-text-color: #000;
   --modal-bg-color: rgba(0, 0, 0, 0.5);
+  --text-color-day: #0009;
+  --text-color-night: #ffffff;
 }
 
 /* ------------------------------------------------- */
@@ -19,16 +20,15 @@ body {
   align-items: center;
   flex-direction: column;
   min-height: 100vh;
-  background: linear-gradient(
-    to bottom,
-    var(--main-bg-color),
-    var(--secondary-bg-color)
-  );
+  background: linear-gradient(to bottom,
+      var(--main-bg-color),
+      var(--secondary-bg-color));
   margin: 0;
   font-family: "Poppins", sans-serif;
   transition: background-color 2s, color 2s;
-  color: var(--text-color);
+  color: var(--text-color-day);
 }
+
 button {
   width: 22.5rem;
   height: 3.75rem;
@@ -49,14 +49,13 @@ button:hover {
 
 h1 {
   font-size: 2.5rem;
-  font-weight: 400; /* 600 ou 300 */
-  color: var(--text-color);
+  font-weight: 400;
+  /* 600 ou 300 */
 }
 
 h2 {
   font-size: 1.5rem;
   font-weight: 300;
-  color: var(--text-color);
 }
 
 header button {
@@ -81,7 +80,8 @@ footer {
 /* ------------------------------------------------- */
 /* CSS POUR LA FENETRE MODAL */
 .modal {
-  display: none; /* Initialement cachée */
+  display: none;
+  /* Initialement cachée */
   position: fixed;
   z-index: 1;
   left: 0;
@@ -106,6 +106,7 @@ footer {
   text-align: center;
   position: relative;
   background-color: #d8efd3;
+  border: 2px solid #55ad9b;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
   animation: fadeIn 0.5s;
 }
@@ -114,6 +115,7 @@ footer {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -122,12 +124,15 @@ footer {
 /* ------------------------------------------------- */
 /* CSS POUR LE SWITCH DAY MODE TO NIGHT MODE */
 body.day-mode {
-  background: linear-gradient(
-    to bottom,
-    var(--main-bg-color),
-    var(--secondary-bg-color)
-  );
-  color: var(--text-color);
+  background: linear-gradient(to bottom,
+      var(--main-bg-color),
+      var(--secondary-bg-color));
+  color: var(--text-color-day);
+}
+
+body.day-mode button {
+  background-color: var(--accent-color);
+  color: var(--text-color-day);
 }
 
 body.night-mode button {
@@ -136,17 +141,8 @@ body.night-mode button {
 }
 
 body.night-mode {
-  background: linear-gradient(
-    to bottom,
-    var(--highlight-color),
-    var(--accent-color)
-  );
-  color: white;
-}
-
-body.day-mode button {
-  background-color: var(--accent-color);
-  color: white;
+  background: linear-gradient(180deg, #0a0a23, #14142e, #1e1e38, #282843, #000000);
+  color: var(--text-color-night);
 }
 
 .toggle-container {
@@ -181,7 +177,7 @@ body.day-mode button {
   transition: transform 0.3s;
 }
 
-.mode-switch:checked + .mode-label::after {
+.mode-switch:checked+.mode-label::after {
   transform: translateX(26px);
 }
 
@@ -224,16 +220,19 @@ body.day-mode button {
   width: 100%;
   height: auto;
 }
+
 #flex-wrap-video {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
+
 .btns {
   display: block;
   margin-top: 1rem;
 }
+
 video,
 #canvasVideo {
   width: 100%;
@@ -274,7 +273,7 @@ video,
   margin-bottom: 2rem;
 }
 
-#reultats-affichage {
+#resultats-affichage {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -287,19 +286,17 @@ video,
 .grid-wrap {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 3rem;
+  gap: 6rem;
   margin: 0 auto;
   max-width: 1300px;
-}
-
-.capture-card {
-  border: 5px solid var(--main-bg-color);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 3rem;
 }
 
 .capture-card img {
   width: auto;
   height: 100%;
+  border: 5px solid var(--main-bg-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #titre-filtrage {
@@ -311,7 +308,7 @@ video,
 .grid-container-imgs {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 3rem;
+  gap: 6rem;
   margin: 0 auto;
   max-width: 1300px;
   margin-top: 2rem;
@@ -327,4 +324,6 @@ video,
   display: none;
 }
 
-
+#titre-captures {
+  display: none;
+}
