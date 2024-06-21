@@ -283,7 +283,7 @@ video,
 }
 
 /* ------------------------------------------------- */
-/* CSS POUR L'AFFICHAGE DES CPATURES D'ECRAN ET LA SELECTION */
+/* CSS POUR L'AFFICHAGE DES CPATURES D'ECRAN DU FILTRAGE D'OBJETS */
 .grid-wrap {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -301,3 +301,30 @@ video,
   width: auto;
   height: 100%;
 }
+
+#titre-filtrage {
+  display: none;
+}
+
+/* ------------------------------------------------- */
+/* CSS POUR L'AFFICHAGE DES CAPTURES D'ECRAN SANS LE FILTRAGE */
+.grid-container-imgs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  margin: 0 auto;
+  max-width: 1300px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.grid-container-imgs img {
+  border: 5px solid var(--main-bg-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hidden {
+  display: none;
+}
+
+

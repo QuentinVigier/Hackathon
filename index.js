@@ -11,7 +11,8 @@ let ctxImage = canvasImage.getContext("2d");
 let captureButton = document.getElementById("capture");
 let predictionsElement = document.getElementById("predictionsImage");
 const startButton = document.getElementById("startButton");
-//list capture ecran
+
+//LISTE DES CAPTURES D'ECRAN
 let capturedImages = document.getElementById("captured-images");
 
 let filterResult = document.getElementById("filterResult");
@@ -40,7 +41,7 @@ startButton.addEventListener("click", async () => {
         prediction.bbox[0],
         prediction.bbox[1]
       );
-      predictionsDiv.innerHTML += prediction.class;
+      predictionsDiv.innerHTML += prediction.class+'&nbsp';
     });
   }
 
@@ -185,11 +186,6 @@ async function detectObjects() {
   const predictions = await model.detect(canvasImage);
   predictionsElement.innerHTML = "";
   predictions.forEach((prediction) => {
-    predictionsElement.innerHTML += `
-                <p>${prediction.class} - ${Math.round(
-      prediction.score * 100
-    )}%</p>
-            `;
     drawBoundingBox(prediction);
   });
 }
@@ -214,6 +210,9 @@ function afficherCapturedImage() {
   const img = document.createElement("img");
   img.src = canvasImage.toDataURL();
   capturedImages.appendChild(img);
+  document.getElementById('titre-captures').classList.remove('hidden');
+  document.getElementById('titre-captures').style.display = 'block';
+
 }
 
 // FILTRAGE PAR DIFFERENT CLASS D'OBJET
@@ -246,6 +245,8 @@ selectedFilter.addEventListener("change", (e) => {
     : filters.push(e.target.value);
   console.log("filters", filters);
 
+  document.getElementById('titre-filtrage').style.display = 'none';
+  document.getElementById('titre-filtrage').classList.add('hidden');
   let filterDiv = "";
   filters.forEach((filter) => {
     filter = filter.toLowerCase();
@@ -273,6 +274,8 @@ selectedFilter.addEventListener("change", (e) => {
             ) {
               console.log("inside if");
               filterDiv += `<div id='result' class="capture-card"><img id='filtreImg' src='${datas[index][0].imgDB}'/></div>`;
+              document.getElementById('titre-filtrage').classList.remove('hidden');
+              document.getElementById('titre-filtrage').style.display = 'block';
             }
           }
         }
