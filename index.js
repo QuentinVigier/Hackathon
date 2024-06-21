@@ -187,6 +187,8 @@ async function detectObjects() {
   predictionsElement.innerHTML = "";
   predictions.forEach((prediction) => {
     drawBoundingBox(prediction);
+    let img = canvasImage.toDataURL('image/png');
+    saveData(img,prediction);
   });
 }
 
